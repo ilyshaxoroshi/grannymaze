@@ -1,11 +1,12 @@
--- Load Rayfield UI
+-- Granny Maze Cheats v6 by ggHahah (Luau for Xeno/KRNL)
+-- Added support for KillerNpc1 (and any KillerNPC*)
+
 local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 
--- Create Window with Key System (one static key for all)
 local Window = Rayfield:CreateWindow({
-    Name = "Granny Maze Cheats v5 (w/ Key System)",
+    Name = "Granny Maze Cheats v6 (KillerNpc1 Fixed)",
     LoadingTitle = "Granny Maze",
-    LoadingSubtitle = "by vladislav on roblox, xAI",
+    LoadingSubtitle = "by ggHahah", xAI, vladislav on roblox,
     ConfigurationSaving = { Enabled = false },
     KeySystem = true,
     KeySettings = {
@@ -13,19 +14,16 @@ local Window = Rayfield:CreateWindow({
         Subtitle = "Get key from Discord!",
         Note = "Join https://discord.gg/jf5GFrMa to copy the code",
         FileName = "GrannyKey",
-        SaveKey = false,  -- Don't save locally
+        SaveKey = false,
         GrabKeyFromSite = false,
-        Key = {"fuck1ai1who1made1script1"}  -- Static key here (btw u can take it if u dont wanna join discord)
+        Key = {"fuck1ai1who1made1script1"}
     }
 })
 
--- Create Tab
 local Tab = Window:CreateTab("Main", nil)
 
--- ESP Section
 local Section = Tab:CreateSection("ESP Features (BoxHandleAdornment)")
 
--- Function to create Adornment
 local function createAdornment(parent, color, transparency)
     local adorn = Instance.new("BoxHandleAdornment")
     adorn.Size = parent.Size
@@ -48,10 +46,10 @@ local ButtonESPToggle = Tab:CreateToggle({
             local function refreshButtonESP()
                 for _, ad in ipairs(buttonAdorns) do ad:Destroy() end
                 buttonAdorns = {}
-                wait(0.5)  -- Delay for load
+                wait(0.5)
                 for _, obj in ipairs(workspace:GetDescendants()) do
                     if obj:IsA("BasePart") and (obj.Name == "Button" or obj.Name == "Button1" or obj.Name == "Button2") then
-                        table.insert(buttonAdorns, createAdornment(obj, Color3.fromRGB(0, 255, 0), 0.3))  -- Green
+                        table.insert(buttonAdorns, createAdornment(obj, Color3.fromRGB(0, 255, 0), 0.3))
                     end
                 end
             end
@@ -59,7 +57,7 @@ local ButtonESPToggle = Tab:CreateToggle({
             spawn(function()
                 while ButtonESPToggle.CurrentValue do
                     refreshButtonESP()
-                    wait(2)  -- Auto-refresh loop
+                    wait(2)
                 end
             end)
         else
@@ -79,10 +77,10 @@ local DoorESPToggle = Tab:CreateToggle({
             local function refreshDoorESP()
                 for _, ad in ipairs(doorAdorns) do ad:Destroy() end
                 doorAdorns = {}
-                wait(0.5)  -- Delay for load
+                wait(0.5)
                 for _, obj in ipairs(workspace:GetDescendants()) do
                     if obj:IsA("BasePart") and (obj.Name == "Door" or obj.Name == "Door1" or obj.Name == "Door2") then
-                        table.insert(doorAdorns, createAdornment(obj, Color3.fromRGB(255, 0, 0), 0.3))  -- Red
+                        table.insert(doorAdorns, createAdornment(obj, Color3.fromRGB(255, 0, 0), 0.3))
                     end
                 end
             end
@@ -114,7 +112,7 @@ local BearTrapESPToggle = Tab:CreateToggle({
                 wait(0.5)
                 for _, obj in ipairs(workspace:GetDescendants()) do
                     if obj:IsA("BasePart") and table.find(beartrapNames, obj.Name) then
-                        table.insert(beartrapAdorns, createAdornment(obj, Color3.fromRGB(255, 165, 0), 0.3))  -- Orange
+                        table.insert(beartrapAdorns, createAdornment(obj, Color3.fromRGB(255, 165, 0), 0.3))
                     end
                 end
             end
@@ -132,10 +130,10 @@ local BearTrapESPToggle = Tab:CreateToggle({
     end,
 })
 
--- KillerNPC ESP
+-- KillerNPC / KillerNpc1 ESP (теперь на все модели, имя которых начинается с "KillerNPC")
 local killerAdorns = {}
 local KillerNPCESPToggle = Tab:CreateToggle({
-    Name = "KillerNPC ESP (Adornment Chams)",
+    Name = "KillerNPC + KillerNpc1 ESP (Adornment Chams)",
     CurrentValue = false,
     Callback = function(Value)
         if Value then
@@ -143,11 +141,11 @@ local KillerNPCESPToggle = Tab:CreateToggle({
                 for _, ad in ipairs(killerAdorns) do ad:Destroy() end
                 killerAdorns = {}
                 wait(0.5)
-                for _, model in ipairs(workspace:GetDescendants()) do
-                    if model:IsA("Model") and model.Name == "KillerNPC" then
-                        for _, part in ipairs(model:GetDescendants()) do
+                for _, obj in ipairs(workspace:GetDescendants()) do
+                    if obj:IsA("Model") and string.find(obj.Name:lower(), "killernpc") == 1 then  -- KillerNPC, KillerNpc1, etc.
+                        for _, part in ipairs(obj:GetDescendants()) do
                             if part:IsA("BasePart") then
-                                table.insert(killerAdorns, createAdornment(part, Color3.fromRGB(255, 0, 255), 0.6))  -- Purple
+                                table.insert(killerAdorns, createAdornment(part, Color3.fromRGB(255, 0, 255), 0.6))  -- Purple chams
                             end
                         end
                     end
@@ -167,7 +165,6 @@ local KillerNPCESPToggle = Tab:CreateToggle({
     end,
 })
 
--- Refresh All Button
 Tab:CreateButton({
     Name = "Refresh All ESP",
     Callback = function()
@@ -178,10 +175,8 @@ Tab:CreateButton({
     end,
 })
 
--- Hacks Section
 local HacksSection = Tab:CreateSection("Other Hacks")
 
--- Anti Jump CD Toggle
 local jumpConnection
 local AntiJumpCDToggle = Tab:CreateToggle({
     Name = "Anti Jump CD (Infinite Jump)",
@@ -206,7 +201,6 @@ local AntiJumpCDToggle = Tab:CreateToggle({
     end,
 })
 
--- Handle respawn for Anti Jump CD
 game.Players.LocalPlayer.CharacterAdded:Connect(function()
     if AntiJumpCDToggle.CurrentValue then
         AntiJumpCDToggle.Callback(false)
@@ -214,7 +208,6 @@ game.Players.LocalPlayer.CharacterAdded:Connect(function()
     end
 end)
 
--- Speed Slider with anti-reset
 local speedConnection
 local currentSpeed = 16
 local SpeedSlider = Tab:CreateSlider({
@@ -239,15 +232,13 @@ local SpeedSlider = Tab:CreateSlider({
     end,
 })
 
--- Handle respawn for speed
 game.Players.LocalPlayer.CharacterAdded:Connect(function(char)
     char:WaitForChild("Humanoid").WalkSpeed = currentSpeed
     if currentSpeed > 16 then
-        SpeedSlider.Callback(currentSpeed)  -- Re-start loop
+        SpeedSlider.Callback(currentSpeed)
     end
 end)
 
--- Noclip Toggle
 local noclipConnection
 local NoclipToggle = Tab:CreateToggle({
     Name = "Noclip",
@@ -281,7 +272,6 @@ local NoclipToggle = Tab:CreateToggle({
     end,
 })
 
--- Handle respawn for noclip
 game.Players.LocalPlayer.CharacterAdded:Connect(function(char)
     if NoclipToggle.CurrentValue then
         NoclipToggle.Callback(false)
