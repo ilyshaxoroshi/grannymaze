@@ -1,9 +1,12 @@
+-- Granny Maze Cheats v7 by ggHahah (Luau for Xeno/KRNL)
+-- Fullbright + No Fog + KillerNpc1 ESP Fixed
+
 local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 
 local Window = Rayfield:CreateWindow({
-    Name = "Granny Maze Cheats v6 (KillerNpc1 Fixed)",
+    Name = "Granny Maze Cheats v7 (Fullbright Added)",
     LoadingTitle = "Granny Maze",
-    LoadingSubtitle = "by ggHahah | xAI | vladislav on roblox",
+    LoadingSubtitle = "by ggHahah, vladislav on roblox, xAI",
     ConfigurationSaving = { Enabled = false },
     KeySystem = true,
     KeySettings = {
@@ -127,7 +130,7 @@ local BearTrapESPToggle = Tab:CreateToggle({
     end,
 })
 
--- KillerNPC / KillerNpc1 ESP (теперь на все модели, имя которых начинается с "KillerNPC")
+-- KillerNPC / KillerNpc1 ESP
 local killerAdorns = {}
 local KillerNPCESPToggle = Tab:CreateToggle({
     Name = "KillerNPC + KillerNpc1 ESP (Adornment Chams)",
@@ -139,10 +142,10 @@ local KillerNPCESPToggle = Tab:CreateToggle({
                 killerAdorns = {}
                 wait(0.5)
                 for _, obj in ipairs(workspace:GetDescendants()) do
-                    if obj:IsA("Model") and string.find(obj.Name:lower(), "killernpc") == 1 then  -- KillerNPC, KillerNpc1, etc.
+                    if obj:IsA("Model") and string.find(obj.Name:lower(), "killernpc") == 1 then
                         for _, part in ipairs(obj:GetDescendants()) do
                             if part:IsA("BasePart") then
-                                table.insert(killerAdorns, createAdornment(part, Color3.fromRGB(255, 0, 255), 0.6))  -- Purple chams
+                                table.insert(killerAdorns, createAdornment(part, Color3.fromRGB(255, 0, 255), 0.6))
                             end
                         end
                     end
@@ -174,6 +177,7 @@ Tab:CreateButton({
 
 local HacksSection = Tab:CreateSection("Other Hacks")
 
+-- Anti Jump CD Toggle
 local jumpConnection
 local AntiJumpCDToggle = Tab:CreateToggle({
     Name = "Anti Jump CD (Infinite Jump)",
@@ -205,6 +209,7 @@ game.Players.LocalPlayer.CharacterAdded:Connect(function()
     end
 end)
 
+-- Speed Slider with anti-reset
 local speedConnection
 local currentSpeed = 16
 local SpeedSlider = Tab:CreateSlider({
@@ -236,6 +241,7 @@ game.Players.LocalPlayer.CharacterAdded:Connect(function(char)
     end
 end)
 
+-- Noclip Toggle
 local noclipConnection
 local NoclipToggle = Tab:CreateToggle({
     Name = "Noclip",
@@ -264,6 +270,7 @@ local NoclipToggle = Tab:CreateToggle({
                         part.CanCollide = true
                     end
                 end
+                end
             end
         end
     end,
@@ -275,3 +282,77 @@ game.Players.LocalPlayer.CharacterAdded:Connect(function(char)
         NoclipToggle.Callback(true)
     end
 end)
+
+-- No Fog + Fullbright Toggle
+local originalAtmosphere = nil
+local originalLighting = {
+    Ambient = nil,
+    Brightness = nil,
+    OutdoorAmbient = nil,
+    GlobalShadows = nil
+}
+
+local NoFogFullbrightToggle = Tab:CreateToggle({
+    Name = "No Fog + Fullbright",
+    CurrentValue = false,
+    Callback = function(Value)
+        local Lighting = game:GetService("Lighting")
+        
+        if Value then
+            -- Сохраняем оригинальные значения
+            if Lighting:FindFirstChild("Atmosphere") or Lighting:FindFirstChild("Atmosphere1") then
+                local atm = Lighting:FindFirstChild("Atmosphere") or Lighting:FindFirstChild("Atmosphere1")
+                originalAtmosphere = atm:Clone()
+            end
+            
+            originalLighting.Ambient = Lighting.Ambient
+            originalLighting.Brightness = Lighting.Brightness
+            originalLighting.OutdoorAmbient = Lighting.OutdoorAmbient
+            originalLighting.GlobalShadows = Lighting.GlobalShadows
+            
+            -- Удаляем Atmosphere (туман)
+            if Lighting:FindFirstChild("Atmosphere") then
+                Lighting.Atmosphere:Destroy()
+            end
+            if Lighting:FindFirstChild("Atmosphere1") then
+                Lighting.Atmosphere1:Destroy()
+            end
+            
+            -- Fullbright
+            Lighting.Ambient = Color3.fromRGB(255, 255, 255)
+            Lighting.Brightness = 2
+            Lighting.OutdoorAmbient = Color3.fromRGB(128, 128, 128)
+            Lighting.GlobalShadows = false
+            
+        else
+            -- Возвращаем оригинал
+            if originalAtmosphere then
+                originalAtmosphere.Parent = Lighting
+                originalAtmosphere = nil
+            end
+            
+            -- Восстанавливаем Lighting
+            if originalLighting.Ambient then
+                Lighting.Ambient = originalLighting.Ambient
+            end
+            if originalLighting.Brightness then
+                Lighting.Brightness = originalLighting.Brightness
+            end
+            if originalLighting.OutdoorAmbient then
+                Lighting.OutdoorAmbient = originalLighting.OutdoorAmbient
+            end
+            if originalLighting.GlobalShadows ~= nil then
+                Lighting.GlobalShadows = originalLighting.GlobalShadows
+            end
+            
+            originalLighting = { Ambient = nil, Brightness = nil, OutdoorAmbient = nil, GlobalShadows = nil }
+        end
+    end,
+})
+
+Tab:CreateButton({
+    Name = "Reset Lighting (Emergency)",
+    Callback = function()
+        NoFogFullbrightToggle.Callback(false)
+    end,
+})
