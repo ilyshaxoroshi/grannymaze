@@ -1,6 +1,3 @@
--- Granny Maze Cheats v6 by ggHahah (Luau for Xeno/KRNL)
--- Added support for KillerNpc1 (and any KillerNPC*)
-
 local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 
 local Window = Rayfield:CreateWindow({
