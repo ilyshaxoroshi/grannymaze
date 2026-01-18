@@ -6,7 +6,7 @@ local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 local Window = Rayfield:CreateWindow({
     Name = "Granny Maze Cheats v7 (Fullbright Added)",
     LoadingTitle = "Granny Maze",
-    LoadingSubtitle = "by ggHahah, vladislav on roblox, xAI",
+    LoadingSubtitle = "by ggHahah",
     ConfigurationSaving = { Enabled = false },
     KeySystem = true,
     KeySettings = {
